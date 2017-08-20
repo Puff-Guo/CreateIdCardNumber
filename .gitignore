@@ -27,6 +27,9 @@
 # no .idb file
 *.idb
 
+#no .aps files
+*.aps
+
 # no .tlog file
 *.tlog
 
