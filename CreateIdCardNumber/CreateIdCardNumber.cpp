@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "CreateIdCardNumber.h"
+#include "DialogCallback.h"
 
 #define MAX_LOADSTRING 100
 
@@ -14,6 +15,7 @@ TCHAR szWindowClass[MAX_LOADSTRING];			// 主窗口类名
 // 此代码模块中包含的函数的前向声明: 
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
+
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
@@ -131,33 +133,47 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-	case WM_COMMAND:
-		wmId    = LOWORD(wParam);
-		wmEvent = HIWORD(wParam);
-		// 分析菜单选择: 
-		switch (wmId)
-		{
-		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+		case WM_COMMAND:
+			wmId    = LOWORD(wParam);
+			wmEvent = HIWORD(wParam);
+			// 分析菜单选择: 
+			switch (wmId)
+			{
+				case IDM_ABOUT:
+					DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+					break;
+
+				case IDM_EXIT:
+					DestroyWindow(hWnd);
+					break;
+
+				case IDM_CREATE:
+					DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG_CREATE), hWnd, CreateIdDialog);
+					break;
+
+				case IDM_VERIFY:
+					DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG_VERIFY), hWnd, VerifyIdDialog);
+					break;
+
+				default:
+					return DefWindowProc(hWnd, message, wParam, lParam);
+			}
 			break;
-		case IDM_EXIT:
-			DestroyWindow(hWnd);
+
+		case WM_PAINT:
+			hdc = BeginPaint(hWnd, &ps);
+			// TODO:  在此添加任意绘图代码...
+			EndPaint(hWnd, &ps);
 			break;
+
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
+
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-		break;
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		// TODO:  在此添加任意绘图代码...
-		EndPaint(hWnd, &ps);
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
+
 	return 0;
 }
 

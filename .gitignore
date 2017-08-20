@@ -24,6 +24,9 @@
 # no log file
 *.log
 
+#no .suo files
+*.suo
+
 # no .idb file
 *.idb
 
